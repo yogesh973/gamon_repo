@@ -111,6 +111,7 @@ const LoginHeader = () => {
               float: "right",
               marginTop: "1.5%",
               fontSize: "14px",
+              marginRight: "2%",
             }}
           >
             Log out
