@@ -434,8 +434,15 @@ func cpuMetric(appNames string) (val string) {
 
 	valsss = res2
 
+	// Get Avg CPU core
+	totalCpuCore := L.AndroidCPUCores(appNames)
+	cpuUse, _ := strconv.Atoi(valsss)
+	cpuCore, _ := strconv.Atoi(totalCpuCore)
+	avgCpuUsages := float64(cpuUse) / float64(cpuCore)
+	fmt.Println("Avg CPU Core ::", avgCpuUsages)
+
 	var info = CPUInfo{
-		CPU_metric:   valsss,
+		CPU_metric:   fmt.Sprint(avgCpuUsages),
 		Cpu_Activity: currentactiviy,
 	}
 
