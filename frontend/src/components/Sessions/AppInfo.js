@@ -240,18 +240,18 @@ class AppData extends React.Component {
   }
 
   // componentDidUpdate(prevprops) {
-  //   if (this.props.userInfo !== prevprops.state) {
-  //     this.setState({ userInfo: this.props.userInfo });
-  //   }
+  // if (this.props.userInfo !== prevprops.state) {
+  // this.setState({ userInfo: this.props.userInfo });
+  // }
   // }
 
   handleCpuStart() {
     console.log(this.state.cpuStart, "cpustrtbefore");
     // setInterval(() =>{
-    //   let time = new Date(this.state.timeSeconds * 1000)
-    //   .toISOString()
-    //   .substr(14, 5);
-    //    this.setState({timer:time})
+    // let time = new Date(this.state.timeSeconds * 1000)
+    // .toISOString()
+    // .substr(14, 5);
+    // this.setState({timer:time})
 
     // })
 
@@ -364,21 +364,24 @@ class AppData extends React.Component {
             .gpuMetric(this.props.location.state.value)
             .then((result) => {
               console.log(result, "gpu_pre");
-              let results = Number(result.substr(18));
+              let results = JSON.parse(result);
               console.log(results);
               console.log(result);
-              this.setState({ GpuUsage: results });
+              this.setState({ GpuUsage: results.gpu_metric });
               // this.setState({
-              //   timeSeconds: this.state.timeSeconds + 3,
+              // timeSeconds: this.state.timeSeconds + 3,
               // });
               // let time = new Date(this.state.timeSeconds * 1000)
-              //   .toISOString()
-              //   .substr(14, 5);
+              // .toISOString()
+              // .substr(14, 5);
               console.log(this.state.GpuUsage, "gpu");
               if (this.state.gpuValues.length < 8) {
                 this.setState({
-                  gpuValues: [...this.state.gpuValues, results],
-
+                  gpuValues: [...this.state.gpuValues, results.gpu_metric],
+                  gpu_activity: [
+                    ...this.state.gpu_activity,
+                    results.gpu_activity,
+                  ],
                   // timeValues: [...this.state.timeValues, time],
                 });
                 console.log(time, "timeeeeeeeeeeeeeeeeee");
@@ -386,7 +389,11 @@ class AppData extends React.Component {
                 this.state.gpuValues.shift();
                 // this.state.timeValues.shift();
                 this.setState({
-                  gpuValues: [...this.state.gpuValues, results],
+                  gpuValues: [...this.state.gpuValues, results.gpu_metric],
+                  gpu_activity: [
+                    ...this.state.gpu_activity,
+                    results.gpu_activity,
+                  ],
 
                   // timeValues: [...this.state.timeValues, time],
                 });
@@ -397,12 +404,16 @@ class AppData extends React.Component {
           window.backend
             .memoryMetric(this.props.location.state.value)
             .then((result) => {
-              let results = result.substring(result.indexOf(":") + 1);
+              let results = JSON.parse(result);
               console.log(results, "memory");
-              this.setState({ memoryUsage: results });
+              this.setState({ memoryUsage: results.memory_metric });
               if (this.state.memValues.length < 8) {
                 this.setState({
-                  memValues: [...this.state.memValues, results],
+                  memValues: [...this.state.memValues, results.memory_metric],
+                  mem_activity: [
+                    ...this.state.mem_activity,
+                    results.memory_activity,
+                  ],
 
                   // timeValues: [...this.state.timeValues, time],
                 });
@@ -411,7 +422,11 @@ class AppData extends React.Component {
                 this.state.gpuValues.shift();
                 // this.state.timeValues.shift();
                 this.setState({
-                  memValues: [...this.state.memValues, results],
+                  memValues: [...this.state.memValues, results.memory_metric],
+                  mem_activity: [
+                    ...this.state.mem_activity,
+                    results.memory_activity,
+                  ],
 
                   // timeValues: [...this.state.timeValues, time],
                 });
@@ -422,14 +437,20 @@ class AppData extends React.Component {
             .uploadData(this.props.location.state.value)
             .then((result) => {
               console.log(result);
-              let results = result.substring(result.indexOf(":") + 1);
+              let results = JSON.parse(result);
               console.log(results, "upload");
-              this.setState({ Uploaddata: results });
+              this.setState({ Uploaddata: results.upload_metric });
               console.log(this.state.Uploaddata);
               if (this.state.uploadValues.length < 8) {
                 this.setState({
-                  uploadValues: [...this.state.uploadValues, results],
-
+                  uploadValues: [
+                    ...this.state.uploadValues,
+                    results.upload_metric,
+                  ],
+                  upload_activity: [
+                    ...this.state.upload_activity,
+                    results.upload_activity,
+                  ],
                   // timeValues: [...this.state.timeValues, time],
                 });
                 console.log(time, "timeeeeeeeeeeeeeeeeee");
@@ -437,8 +458,14 @@ class AppData extends React.Component {
                 this.state.uploadValues.shift();
                 // this.state.timeValues.shift();
                 this.setState({
-                  uploadValues: [...this.state.uploadValues, results],
-
+                  uploadValues: [
+                    ...this.state.uploadValues,
+                    results.upload_metric,
+                  ],
+                  upload_activity: [
+                    ...this.state.upload_activity,
+                    results.upload_activity,
+                  ],
                   // timeValues: [...this.state.timeValues, time],
                 });
               }
@@ -447,13 +474,19 @@ class AppData extends React.Component {
             .downloadedData(this.props.location.state.value)
             .then((result) => {
               console.log(result);
-              let results = result.substring(result.indexOf(":") + 1);
-              this.setState({ DownloadData: results });
+              let results = JSON.parse(result);
+              this.setState({ DownloadData: results.download_metric });
               console.log(this.state.DownloadData);
               if (this.state.downloadValues.length < 8) {
                 this.setState({
-                  downloadValues: [...this.state.downloadValues, results],
-
+                  downloadValues: [
+                    ...this.state.downloadValues,
+                    results.download_metric,
+                  ],
+                  download_activity: [
+                    ...this.state.download_activity,
+                    results.download_activity,
+                  ],
                   // timeValues: [...this.state.timeValues, time],
                 });
                 console.log(time, "timeeeeeeeeeeeeeeeeee");
@@ -461,63 +494,75 @@ class AppData extends React.Component {
                 this.state.downloadValues.shift();
                 // this.state.timeValues.shift();
                 this.setState({
-                  downloadValues: [...this.state.downloadValues, results],
-
+                  downloadValues: [
+                    ...this.state.downloadValues,
+                    results.download_metric,
+                  ],
+                  download_activity: [
+                    ...this.state.download_activity,
+                    results.download_activity,
+                  ],
                   // timeValues: [...this.state.timeValues, time],
                 });
               }
             });
 
           // window.backend
-          //   .powerMetric(this.props.location.state.value)
-          //   .then((result) => {
-          //     console.log(result);
-          //     let results = JSON.parse(result);
-          //     console.log(results, "power");
-          //     this.setState({ power: results.power_metric });
-          //     console.log(this.state.power);
-          //     if (this.state.powerValues.length < 8) {
-          //       this.setState({
-          //         powerValues: [
-          //           ...this.state.powerValues,
-          //           results.power_metric,
-          //         ],
-          //         power_activity: [
-          //           ...this.state.power_activity,
-          //           results.power_activity,
-          //         ],
-          //         // timeValues: [...this.state.timeValues, time],
-          //       });
-          //       console.log(time, "timeeeeeeeeeeeeeeeeee");
-          //     } else {
-          //       this.state.powerValues.shift();
-          //       // this.state.timeValues.shift();
-          //       this.setState({
-          //         powerValues: [
-          //           ...this.state.powerValues,
-          //           results.power_metric,
-          //         ],
-          //         power_activity: [
-          //           ...this.state.power_activity,
-          //           results.power_activity,
-          //         ],
-          //         // timeValues: [...this.state.timeValues, time],
-          //       });
-          //     }
-          //   });
+          // .powerMetric(this.props.location.state.value)
+          // .then((result) => {
+          // console.log(result);
+          // let results = JSON.parse(result);
+          // console.log(results, "power");
+          // this.setState({ power: results.power_metric });
+          // console.log(this.state.power);
+          // if (this.state.powerValues.length < 8) {
+          // this.setState({
+          // powerValues: [
+          // ...this.state.powerValues,
+          // results.power_metric,
+          // ],
+          // power_activity: [
+          // ...this.state.power_activity,
+          // results.power_activity,
+          // ],
+          // // timeValues: [...this.state.timeValues, time],
+          // });
+          // console.log(time, "timeeeeeeeeeeeeeeeeee");
+          // } else {
+          // this.state.powerValues.shift();
+          // // this.state.timeValues.shift();
+          // this.setState({
+          // powerValues: [
+          // ...this.state.powerValues,
+          // results.power_metric,
+          // ],
+          // power_activity: [
+          // ...this.state.power_activity,
+          // results.power_activity,
+          // ],
+          // // timeValues: [...this.state.timeValues, time],
+          // });
+          // }
+          // });
 
           window.backend
             .appPowerMetric(this.props.location.state.value)
             .then((result) => {
               console.log(result, "app power result");
-              let results = result.substring(result.indexOf(":") + 1);
+              let results = JSON.parse(result);
               console.log(results, "app power results");
-              this.setState({ appPower: results });
+              this.setState({ appPower: results.Apppower_metric });
               console.log(this.state.appPower);
               if (this.state.appPowerValues.length < 8) {
                 this.setState({
-                  appPowerValues: [...this.state.appPowerValues, results],
-
+                  appPowerValues: [
+                    ...this.state.appPowerValues,
+                    results.Apppower_metric,
+                  ],
+                  power_activity: [
+                    ...this.state.power_activity,
+                    results.Apppower_activity,
+                  ],
                   // timeValues: [...this.state.timeValues, time],
                 });
                 console.log(time, "timeeeeeeeeeeeeeeeeee");
@@ -525,8 +570,14 @@ class AppData extends React.Component {
                 this.state.appPowerValues.shift();
                 // this.state.timeValues.shift();
                 this.setState({
-                  appPowerValues: [...this.state.appPowerValues, results],
-
+                  appPowerValues: [
+                    ...this.state.appPowerValues,
+                    results.Apppower_metric,
+                  ],
+                  power_activity: [
+                    ...this.state.power_activity,
+                    results.Apppower_activity,
+                  ],
                   // timeValues: [...this.state.timeValues, time],
                 });
               }
@@ -536,13 +587,19 @@ class AppData extends React.Component {
             .Peakmomery(this.props.location.state.value)
             .then((result) => {
               console.log(result, "fps result");
-              let results = result.substring(result.indexOf(":") + 1);
-              this.setState({ peakMemory: results });
+              let results = JSON.parse(result);
+              this.setState({ peakMemory: results.peakmem_metric });
               console.log(this.state.peakMemory, "fps value");
               if (this.state.peakMemoryValues.length < 8) {
                 this.setState({
-                  peakMemoryValues: [...this.state.peakMemoryValues, results],
-
+                  peakMemoryValues: [
+                    ...this.state.peakMemoryValues,
+                    results.peakmem_metric,
+                  ],
+                  peakmem_activity: [
+                    ...this.state.peakmem_activity,
+                    results.peakmem_activity,
+                  ],
                   // timeValues: [...this.state.timeValues, time],
                 });
                 console.log(time, "timeeeeeeeeeeeeeeeeee");
@@ -550,8 +607,14 @@ class AppData extends React.Component {
                 this.state.peakMemoryValues.shift();
                 // this.state.timeValues.shift();
                 this.setState({
-                  peakMemoryValues: [...this.state.peakMemoryValues, results],
-
+                  peakMemoryValues: [
+                    ...this.state.peakMemoryValues,
+                    results.peakmem_metric,
+                  ],
+                  peakmem_activity: [
+                    ...this.state.peakmem_activity,
+                    results.peakmem_activity,
+                  ],
                   // timeValues: [...this.state.timeValues, time],
                 });
               }
@@ -593,8 +656,8 @@ class AppData extends React.Component {
                 this.setState({
                   fpsValues: [...this.state.fpsValues, results.median_fps],
                   // fpsStabilityValues: [
-                  //   ...this.state.fpsStabilityValues,
-                  //   results.fps_stablity,
+                  // ...this.state.fpsStabilityValues,
+                  // results.fps_stablity,
                   // ],
                   // timeValues: [...this.state.timeValues, time],
                 });
@@ -610,32 +673,32 @@ class AppData extends React.Component {
             });
 
           // window.backend
-          //   .AvgFPSStablity(this.props.location.state.value)
-          //   .then((result) => {
-          //     console.log(result, "fps stability result");
-          //     let results = result.substring(result.indexOf(":") + 1);
-          //     this.setState({ fpsStability: results });
-          //     console.log(this.state.fpsStability, "fps value");
-          //     if (this.state.fpsStabilityValues.length < 8) {
-          //       this.setState({
-          //         fpsStabilityValues: [
-          //           ...this.state.fpsStabilityValues,
-          //           results,
-          //         ],
-          //       });
-          //       console.log(time, "timeeeeeeeeeeeeeeeeee");
-          //     } else {
-          //       this.state.fpsStabilityValues.shift();
-          //       // this.state.timeValues.shift();
-          //       this.setState({
-          //         fpsStabilityValues: [
-          //           ...this.state.fpsStabilityValues,
-          //           results,
-          //         ],
-          //         // timeValues: [...this.state.timeValues, time],
-          //       });
-          //     }
-          //   });
+          // .AvgFPSStablity(this.props.location.state.value)
+          // .then((result) => {
+          // console.log(result, "fps stability result");
+          // let results = result.substring(result.indexOf(":") + 1);
+          // this.setState({ fpsStability: results });
+          // console.log(this.state.fpsStability, "fps value");
+          // if (this.state.fpsStabilityValues.length < 8) {
+          // this.setState({
+          // fpsStabilityValues: [
+          // ...this.state.fpsStabilityValues,
+          // results,
+          // ],
+          // });
+          // console.log(time, "timeeeeeeeeeeeeeeeeee");
+          // } else {
+          // this.state.fpsStabilityValues.shift();
+          // // this.state.timeValues.shift();
+          // this.setState({
+          // fpsStabilityValues: [
+          // ...this.state.fpsStabilityValues,
+          // results,
+          // ],
+          // // timeValues: [...this.state.timeValues, time],
+          // });
+          // }
+          // });
         }, 3000);
       }
     });
@@ -677,18 +740,18 @@ class AppData extends React.Component {
     let baseURL = "http://52.39.98.71:3000/getReport?sessionID=";
 
     // axios
-    //   .get({
-    //     url: `http://52.39.98.71:3000/getReport?sessionID=${this.state.popsession_id}`,
-    //     responseType: "blob",
-    //   })
-    //   .then((response) => {
-    //     console.log(response, "report");
-    //     const url = window.URL.createObjectURL(new Blob([response.data]));
-    //     const link = document.createElement("a");
-    //     link.href = url;
-    //     document.body.appendChild(link);
-    //     link.click();
-    //   });
+    // .get({
+    // url: `http://52.39.98.71:3000/getReport?sessionID=${this.state.popsession_id}`,
+    // responseType: "blob",
+    // })
+    // .then((response) => {
+    // console.log(response, "report");
+    // const url = window.URL.createObjectURL(new Blob([response.data]));
+    // const link = document.createElement("a");
+    // link.href = url;
+    // document.body.appendChild(link);
+    // link.click();
+    // });
   }
 
   handleTitleChange(e) {
@@ -711,29 +774,29 @@ class AppData extends React.Component {
               </p>
 
               {/* <a
-                href={`http://44.226.139.67:3000/getReport?sessionID=${this.state.popsession_id}`}
-                download
-              >
-                <img
-                  src={download}
-                  alt=""
-                  className="downloadImg"
-                  style={{ cursor: "pointer" }}
-                  onClick={() => {
-                    this.handleFileDownload(
-                      "http://44.226.139.67:3000/getReport?sessionID=${this.state.popsession_id}",
-                      "test-download.jpg"
-                    );
-                  }}
-                  // onClick={() => {
-                  //   if (this.state.popsession_id !== "") {
-                  //     window.open(
-                  //       `http://44.226.139.67:3000/getReport?sessionID=${this.state.popsession_id}`
-                  //     );
-                  //   }
-                  // }}
-                />
-              </a> */}
+href={`http://44.226.139.67:3000/getReport?sessionID=${this.state.popsession_id}`}
+download
+>
+<img
+src={download}
+alt=""
+className="downloadImg"
+style={{ cursor: "pointer" }}
+onClick={() => {
+this.handleFileDownload(
+"http://44.226.139.67:3000/getReport?sessionID=${this.state.popsession_id}",
+"test-download.jpg"
+);
+}}
+// onClick={() => {
+// if (this.state.popsession_id !== "") {
+// window.open(
+// `http://44.226.139.67:3000/getReport?sessionID=${this.state.popsession_id}`
+// );
+// }
+// }}
+/>
+</a> */}
 
               <p className="timerPara">{this.state.timerClock}</p>
 
@@ -845,8 +908,9 @@ class AppData extends React.Component {
                     unit="%"
                     max={100}
                   />
+
+                  <p className="screen-flow">Screen Flow</p>
                   <div className="screenshots">
-                    <p className="screen-flow">Screen Flow</p>
                     {this.state.imgArray.map((data) => (
                       <div className="imageDiv">
                         <img
@@ -864,18 +928,21 @@ class AppData extends React.Component {
                       metValues={this.state.cpuValues}
                       text="CPU Usage"
                       unit="%"
+                      activity={this.state.cpu_activity}
                     />
                     <MetricGraph
                       metTime={this.state.timeValues}
                       metValues={this.state.gpuValues}
                       text="GPU Usage"
                       unit="%"
+                      activity={this.state.gpu_activity}
                     />
                     <MetricGraph
                       metTime={this.state.timeValues}
                       metValues={this.state.memValues}
                       text="Memory Usage"
                       unit="MB"
+                      activity={this.state.mem_activity}
                     />
 
                     <MetricGraph
@@ -883,18 +950,21 @@ class AppData extends React.Component {
                       metValues={this.state.appPowerValues}
                       text="App Power Usage"
                       unit="mAh"
+                      activity={this.state.power_activity}
                     />
                     <MetricGraph
                       metTime={this.state.timeValues}
                       metValues={this.state.uploadValues}
                       text="Upload Data"
                       unit="MiB"
+                      activity={this.state.upload_activity}
                     />
                     <MetricGraph
                       metTime={this.state.timeValues}
                       metValues={this.state.downloadValues}
                       text="Download Data"
                       unit="MiB"
+                      activity={this.state.download_activity}
                     />
                     <MetricGraph
                       metTime={this.state.timeValues}
@@ -907,12 +977,14 @@ class AppData extends React.Component {
                       metValues={this.state.peakMemoryValues}
                       text="Peak Memory"
                       unit="MB"
+                      activity={this.state.peakmem_activity}
                     />
                     <MetricGraph
                       metTime={this.state.timeValues}
                       metValues={this.state.fpsStabilityValues}
                       text="FPS Stablity"
                       unit="%"
+                      activity={this.state.cpu_activity}
                     />
                   </div>
                 </div>
@@ -1037,127 +1109,127 @@ class AppData extends React.Component {
           )}
 
           {/* {this.state.openTitle && (
-            <div>
-              <Modal
-                open={this.state.openTitle}
-                onClose={this.handleTitleClose.bind(this)}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style1}>
-                  <p style={{ color: "#278ef1", fontSize: "17px" }}>
-                    Session Title
-                  </p>
-                  <TextField
-                    id="standard-basic"
-                    variant="standard"
-                    type="name"
-                    placeholder="Session Title"
-                    onChange={this.handleTitleChange.bind(this)}
-                    sx={{ width: "100%", marginBottom: 2 }}
-                  />
-                  <div className="ok">
-                    <button onClick={this.handleTitleClose.bind(this)}>
-                      Ok
-                    </button>
-                  </div>
-                </Box>
-              </Modal>
-            </div>
-          )}
+<div>
+<Modal
+open={this.state.openTitle}
+onClose={this.handleTitleClose.bind(this)}
+aria-labelledby="modal-modal-title"
+aria-describedby="modal-modal-description"
+>
+<Box sx={style1}>
+<p style={{ color: "#278ef1", fontSize: "17px" }}>
+Session Title
+</p>
+<TextField
+id="standard-basic"
+variant="standard"
+type="name"
+placeholder="Session Title"
+onChange={this.handleTitleChange.bind(this)}
+sx={{ width: "100%", marginBottom: 2 }}
+/>
+<div className="ok">
+<button onClick={this.handleTitleClose.bind(this)}>
+Ok
+</button>
+</div>
+</Box>
+</Modal>
+</div>
+)}
 
-          {this.state.open && (
-            <div>
-              <Modal
-                open={this.state.open}
-                onClose={this.handleClose.bind(this)}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <Box sx={style}>
-                  <div sx={{ p: 4 }}>
-                    <p
-                      style={{
-                        textAlign: "center",
-                        fontSize: "19px",
-                        color: "#278EF1",
-                        paddingTop: "1.3%",
-                      }}
-                    >
-                      Average Metric
-                    </p>
-                  </div>
-                  <hr />
-                  <div className="duration">
-                    <p>Session Title : {this.state.sessionTitle}</p>
-                    <p>Session ID : {this.state.popsession_id}</p>
-                    <p>Total Duration : {this.state.totalTime} </p>
-                  </div>
-                  <div className="popup-div">
-                    <p className="popup-p">
-                      Avg CPU value :
-                      {" " + Math.round(this.state.avgCPU * 100) / 100 + " "}%
-                    </p>
-                    <p>
-                      Avg GPU value :
-                      {" " + Math.round(this.state.avgGPU * 100) / 100 + " "}%
-                    </p>
+{this.state.open && (
+<div>
+<Modal
+open={this.state.open}
+onClose={this.handleClose.bind(this)}
+aria-labelledby="modal-modal-title"
+aria-describedby="modal-modal-description"
+>
+<Box sx={style}>
+<div sx={{ p: 4 }}>
+<p
+style={{
+textAlign: "center",
+fontSize: "19px",
+color: "#278EF1",
+paddingTop: "1.3%",
+}}
+>
+Average Metric
+</p>
+</div>
+<hr />
+<div className="duration">
+<p>Session Title : {this.state.sessionTitle}</p>
+<p>Session ID : {this.state.popsession_id}</p>
+<p>Total Duration : {this.state.totalTime} </p>
+</div>
+<div className="popup-div">
+<p className="popup-p">
+Avg CPU value :
+{" " + Math.round(this.state.avgCPU * 100) / 100 + " "}%
+</p>
+<p>
+Avg GPU value :
+{" " + Math.round(this.state.avgGPU * 100) / 100 + " "}%
+</p>
 
-                    <p>
-                      Avg memory :
-                      {" " + Math.round(this.state.avgMem * 100) / 100 + " "}MB
-                    </p>
+<p>
+Avg memory :
+{" " + Math.round(this.state.avgMem * 100) / 100 + " "}MB
+</p>
 
-                    <p>
-                      Avg uploaded data:
-                      {" " + Math.round(this.state.avgUpload * 100) / 100 + " "}
-                      MiB
-                    </p>
-                    <p>
-                      Avg downloaded data :
-                      {" " +
-                        Math.round(this.state.avgDownload * 100) / 100 +
-                        " "}
-                      MiB
-                    </p>
-                    <p>
-                      Avg fps value :
-                      {" " + Math.round(this.state.avgFps * 100) / 100 + " "}
-                    </p>
+<p>
+Avg uploaded data:
+{" " + Math.round(this.state.avgUpload * 100) / 100 + " "}
+MiB
+</p>
+<p>
+Avg downloaded data :
+{" " +
+Math.round(this.state.avgDownload * 100) / 100 +
+" "}
+MiB
+</p>
+<p>
+Avg fps value :
+{" " + Math.round(this.state.avgFps * 100) / 100 + " "}
+</p>
 
-                    <p>
-                      Avg App Power value :
-                      {" " +
-                        Math.round(this.state.avgAppPower * 100) / 100 +
-                        " "}
-                      mAh
-                    </p>
-                    <p>
-                      Avg Peak Memory value :
-                      {" " +
-                        Math.round(this.state.avgPeakMemory * 100) / 100 +
-                        " "}
-                      MB
-                    </p>
-                    <p>
-                      Avg FPS Stablity value :
-                      {" " + this.state.avgFpsStability + " "}%
-                    </p>
-                  </div>
-                  <div className="note">
-                    <p>
-                      If you want to look for the detailed session details check{" "}
-                    </p>
-                    <p>for the web app.</p>
-                  </div>
-                  <hr />
-                  <div className="ok">
-                    <button onClick={this.handleClose.bind(this)}>Ok</button>
-                  </div>
-                </Box>
-              </Modal>
-            </div>
-          )} */}
+<p>
+Avg App Power value :
+{" " +
+Math.round(this.state.avgAppPower * 100) / 100 +
+" "}
+mAh
+</p>
+<p>
+Avg Peak Memory value :
+{" " +
+Math.round(this.state.avgPeakMemory * 100) / 100 +
+" "}
+MB
+</p>
+<p>
+Avg FPS Stablity value :
+{" " + this.state.avgFpsStability + " "}%
+</p>
+</div>
+<div className="note">
+<p>
+If you want to look for the detailed session details check{" "}
+</p>
+<p>for the web app.</p>
+</div>
+<hr />
+<div className="ok">
+<button onClick={this.handleClose.bind(this)}>Ok</button>
+</div>
+</Box>
+</Modal>
+</div>
+)} */}
         </div>
       );
     }
@@ -1165,15 +1237,15 @@ class AppData extends React.Component {
 }
 
 // const mapStateToProps = (state) =>{" "+
-//   return {
-//     login: state.login,
-//   };
+// return {
+// login: state.login,
+// };
 // };
 
 // const mapDispatchToProps = (dispatch) => {
-//   return {
-//     login: { ...dispatch, backClick: true },
-//   };
+// return {
+// login: { ...dispatch, backClick: true },
+// };
 // };
 // export default connect(mapStateToProps, mapDispatchToProps())(AppData);
 export default AppData;
