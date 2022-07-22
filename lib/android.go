@@ -786,7 +786,7 @@ func CaptureScreen(packageName string) (val string) {
 	filePath := fmt.Sprintf("/sdcard/%s.png", getFilename())
 
 	dest, _ := os.Getwd()
-	dest = dest + fmt.Sprintf("\\img\\%s.png", getFilename())
+	dest = dest + fmt.Sprintf("/frontend/public/assets/snaps/%s.png", getFilename())
 
 	_ = string(run("shell", fmt.Sprintf("screencap -p %s", filePath)))
 

@@ -26,6 +26,7 @@ import download from "../../asset/download.png";
 import timer from "../../asset/timer.png";
 // import TextField from "@mui/material/TextField";
 import fileDownload from "js-file-download";
+import requirePropFactory from "@mui/utils/requirePropFactory";
 
 // import { useSelector } from "react-redux";
 // import { selectUser } from "../../features/loginAuth/loginAuthSlice";
@@ -301,6 +302,8 @@ class AppData extends React.Component {
           }
 
           window.backend.screenshot("com.android.chrome").then((result) => {
+            console.log(result, "screenshot");
+            console.log(typeof result, "type");
             this.setState({
               image: result,
             });
@@ -913,10 +916,8 @@ this.handleFileDownload(
                   <div className="screenshots">
                     {this.state.imgArray.map((data) => (
                       <div className="imageDiv">
-                        <img
-                          src={`data:image/jpeg;base64,${data.image}`}
-                          alt=""
-                        />
+                        {/* file:///home/indium/gamon_repo/frontend/src/asset/img/Img-2022-07-20-18-30-40.png */}
+                        <img src={data.image.split("/public")[1]} alt="img" />
                         <span>{data.timerClock}</span>
                       </div>
                     ))}

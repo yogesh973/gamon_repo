@@ -17,7 +17,7 @@ import "../node_modules/bootstrap/dist/css/bootstrap.css";
 import { useSelector } from "react-redux";
 import { selectUser } from "./features/loginAuth/loginAuthSlice";
 import BasicInfo from "./components/Home/BasicInfo.js";
-// import Heloo from "./components/HelloWorld.js";
+import Heloo from "./components/HelloWorld.js";
 
 const BrowserHistory = React.createContext(null);
 
@@ -28,7 +28,7 @@ function App() {
 
   return (
     <div id="app" className="App">
-      <BrowserHistory.Provider value={history}>
+      {/* <BrowserHistory.Provider value={history}>
         <Router>
           <Switch>
             {user ? (
@@ -45,9 +45,9 @@ function App() {
             )}
           </Switch>
         </Router>
-      </BrowserHistory.Provider>
+      </BrowserHistory.Provider> */}
 
-      {/* <Heloo /> */}
+      <Heloo />
     </div>
   );
 }
