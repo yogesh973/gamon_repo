@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Modal from "react-modal";
+import img from "/home/indium/gamon_repo/frontend/src/asset/androidlogo.png";
 
 function HelloWorld() {
   const [showModal, setShowModal] = useState(false);
@@ -18,9 +19,23 @@ function HelloWorld() {
   const handleOpenModal = () => {
     setShowModal(true);
 
-    window.backend
-      .screenshot("com.android.chrome")
-      .then((result) => setResult(result));
+    function getBase64(file) {
+      console.log(file, "hello file");
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        if (file && file.type.match("image.*")) {
+          reader.readAsDataURL(file);
+        }
+
+        // reader.onload = () => resolve(reader.result);
+        // reader.onerror = (error) => reject(error);
+      });
+    }
+
+    window.backend.screenshot("com.android.chrome").then((result) => {
+      setResult(result);
+      // getBase64(result).then((data) => console.log(data));
+    });
     //window.backend.memmetric("com.android.chrome").then((result) => setResult(result));
     //window.backend.gpuMetric("com.android.chrome").then((result) => setResult(result));
     //window.backend.Uploaddata("com.android.chrome").then((result) => setResult(result));
@@ -96,11 +111,21 @@ function HelloWorld() {
         contentLabel="Minimal Modal Example"
       >
         <p>{result.split("/public")[1]}</p>
-        <p>{`frontend/build${result.split("/public")[1]}`}</p>
+        <p>{result}</p>
         {/* <p>{`process.env.PUBLIC_URL${result.split("/public")[1]}`}</p> */}
         {/* frontend/build/assets/snaps/Img-2022-07-21-12-39-28.png */}
         <p>{typeof result}</p>
-        <img src={result.split("/public")[1]} alt="" />
+        <p>{window.location.href}</p>
+        <img
+          src="file:///home/indium/gamon_repo/frontend/public/assets/snaps/Img-2022-07-25-14-58-27.png"
+          alt=""
+        />
+        <img src={result} alt="" />
+        <img src={img} alt="" />
+        {/* <img
+          src="/home/indium/gamon_repo/frontend/src/asset/androidlogo.png"
+          alt=""
+        /> */}
         <button onClick={() => handleCloseModal()}>Close Modal</button>
       </Modal>
     </div>

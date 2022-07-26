@@ -257,7 +257,7 @@ const SignIn = () => {
                       className="form-check-input"
                       id="exampleCheck1"
                     />
-                    <label className="form-check-label">Check me out</label>
+                    <label className="form-check-label">Remember me</label>
                   </div>
                   <button
                     type="submit"

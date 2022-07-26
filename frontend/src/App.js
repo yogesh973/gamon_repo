@@ -28,7 +28,7 @@ function App() {
 
   return (
     <div id="app" className="App">
-      {/* <BrowserHistory.Provider value={history}>
+      <BrowserHistory.Provider value={history}>
         <Router>
           <Switch>
             {user ? (
@@ -45,9 +45,9 @@ function App() {
             )}
           </Switch>
         </Router>
-      </BrowserHistory.Provider> */}
+      </BrowserHistory.Provider>
 
-      <Heloo />
+      {/* <Heloo /> */}
     </div>
   );
 }

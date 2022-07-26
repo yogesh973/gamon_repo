@@ -917,7 +917,12 @@ this.handleFileDownload(
                     {this.state.imgArray.map((data) => (
                       <div className="imageDiv">
                         {/* file:///home/indium/gamon_repo/frontend/src/asset/img/Img-2022-07-20-18-30-40.png */}
-                        <img src={data.image.split("/public")[1]} alt="img" />
+
+                        <img
+                          src={`data:image/jpeg;base64,${data.image}`}
+                          alt="img"
+                        />
+                        {/* <img src={data.image.split("/public")[1]} alt="img" /> */}
                         <span>{data.timerClock}</span>
                       </div>
                     ))}
