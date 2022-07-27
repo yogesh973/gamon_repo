@@ -86,20 +86,6 @@ func AppGPUUsage(packageName string) (val string) {
 		}
 	}()
 
-	//sub := string(run("shell", "cat /proc/meminfo"))
-	//ind := strings.Index(sub, "GPUTotalUsed:")
-	//if ind == -1 {
-	// return val
-	//}
-	//sub = sub[ind:]
-	//sub = strings.Replace(sub, "GPUTotalUsed:", "", 1)
-	//sub = strings.Replace(sub, "\t", "", -1)
-	//sub = strings.TrimSpace(sub)
-	//data := strings.Split(sub, " ")[0]
-	//total, err := strconv.Atoi(data)
-	//if err != nil {
-	// return val
-	//}
 	sub := string(run("shell", "dumpsys meminfo"))
 	ind := strings.Index(sub, "Tuning:")
 	if ind == -1 {
@@ -119,25 +105,43 @@ func AppGPUUsage(packageName string) (val string) {
 	if err != nil {
 		return val
 	}
-	//return fmt.Sprintf("%d", total)
-	s := string(run("shell", "dumpsys gfxinfo "+packageName))
-	i := strings.Index(s, "Total GPU memory usage:")
-	if i == -1 {
+	fmt.Println("total val", total)
+
+	sub1 := string(run("shell", "cat /proc/meminfo"))
+	ind1 := strings.Index(sub1, "MemFree:")
+	if ind1 == -1 {
 		return val
 	}
-	s = s[i:]
-	s = strings.Replace(s, "Total GPU memory usage:", "", 1)
-	e := strings.Index(s, "bytes")
-	if e == -1 {
-		return val
-	}
-	s = s[:e]
-	ss := strings.Replace(s, "\n", "", -1)
-	ss = strings.TrimSpace(ss)
-	used, err := strconv.Atoi(ss)
+	sub1 = sub1[ind1:]
+	sub1 = strings.Replace(sub1, "MemFree:", "", 1)
+	sub1 = strings.Replace(sub1, "\t", "", -1)
+	sub1 = strings.TrimSpace(sub1)
+	data1 := strings.Split(sub1, " ")[0]
+	used, err := strconv.Atoi(data1)
 	if err != nil {
 		return val
 	}
+	// s := string(run("shell", "dumpsys gfxinfo "+packageName))
+	// i := strings.Index(s, "Total GPU memory usage:")
+	// if i == -1 {
+	// 	return val
+	// }
+	// s = s[i:]
+	// s = strings.Replace(s, "Total GPU memory usage:", "", 1)
+	// e := strings.Index(s, "bytes")
+	// if e == -1 {
+	// 	return val
+	// }
+	// s = s[:e]
+	// ss := strings.Replace(s, "\n", "", -1)
+	// ss = strings.TrimSpace(ss)
+	// used, err := strconv.Atoi(ss)
+	// if err != nil {
+	// 	return val
+	// }
+
+	fmt.Println("used val", used)
+
 	val = fmt.Sprintf("%.2f", float64(used)/float64(total*10))
 	return val
 }
